@@ -39,6 +39,7 @@ export class TaskComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.pattern(this.emailPattern)]),
       phone: new FormControl('', [Validators.required, Validators.pattern(this.phonePattern)]),
       birthDate: new FormControl(new Date(), [Validators.required]),
+      role: new FormControl('', [Validators.required]),
       address: new FormGroup({
         address: new FormControl('', [Validators.required]),
         city: new FormControl('', [Validators.required]),
@@ -103,6 +104,7 @@ export class TaskComponent implements OnInit {
         email: new FormControl(record.email, [Validators.required]),
         phone: new FormControl(record.phone, [Validators.required]),
         birthDate: new FormControl(record.birthDate, [Validators.required]),
+        role: new FormControl(record.role, [Validators.required]),
         address: new FormGroup({
           address: new FormControl(record.address.address, [Validators.required]),
           city: new FormControl(record.address.city, [Validators.required]),

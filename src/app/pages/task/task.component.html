@@ -148,6 +148,22 @@
                 </div>
               </div>
             </div>
+            <div class="row mt-1">
+              <div class="col-md-12">
+                <label class="fw-bold my-1">Role</label>
+                <select class="form-select" formControlName="role">
+                  <option value="" disabled>Select Role</option>
+                  <option value="Manager">Manager</option>
+                  <option value="HR">HR</option>
+                  <option value="Developer">Developer</option>
+                  <option value="Tester">Tester</option>
+                  <option value="Business Analyst">Business Analyst</option>
+                </select>
+                <div class="text-danger" *ngIf="empForm.controls['role'].touched || empForm.controls['role'].dirty">
+                  <span *ngIf="empForm.controls['role'].errors?.['required']">Role is required</span>
+                </div>
+              </div>
+            </div>
             <section formGroupName="address">
               <div class="row mt-1">
                 <div class="col-md-6">
@@ -197,6 +213,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="row mt-1">
                 <div class="col-md-12">
                   <label class="fw-bold my-1">Address</label>
