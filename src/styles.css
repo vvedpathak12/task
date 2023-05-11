@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+html,body{
+  background: #F4F5FA !important;
+}
+
+.hand{
+  cursor: pointer;
+}
+
+.p-dialog-footer .p-confirm-dialog-reject {
+  background: #eb2f2f;
+  border: none;
+}
+.p-dialog-footer .p-confirm-dialog-reject:hover {
+  background: #DC2626 !important;
+}
+.p-dialog-footer .p-confirm-dialog-accept {
+  background: #19a262;
+  border: none;
+}
+.p-dialog-footer .p-confirm-dialog-accept:hover {
+  background: #0f8b51 !important;
+}

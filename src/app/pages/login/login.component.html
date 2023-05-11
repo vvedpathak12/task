@@ -1,0 +1,16 @@
+<div class="parent">
+  <div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+  <form [formGroup]="loginForm">
+    <h3>Login Here</h3>
+    <label for="username">Username</label>
+    <input type="text" placeholder="Username" id="username" formControlName="userName">
+
+    <label for="password">Password</label>
+    <input type="password" placeholder="Password" id="password" formControlName="password">
+
+    <button class="text-dark fs-5" (click)="onLogIn()">Log In</button>
+  </form>
+</div>

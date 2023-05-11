@@ -1,0 +1,230 @@
+<div class="container-fluid">
+  <div class="row mt-1">
+    <div class="" [ngClass]="isSidePanelOpen?'col-md-8':'col-md-12'">
+      <div class="card">
+        <div class="card-header bg-dark">
+          <div class="row">
+            <div class="col-md-8">
+              <h6 class="fw-bold text-white">Employee List</h6>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-sm btn-warning float-end" (click)="onOpenSidePanel()">Add&nbsp;<i
+                  class="fa fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <p-table #dt1 [value]="empArr" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+                  [rowsPerPageOptions]="[10,25,50,75,100]" [paginator]="true"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                  [globalFilterFields]="['firstName','lastName','address.address','address.postalCode','address.state','phone','email','birthDate','gender']"
+                  styleClass="p-datatable-gridlines p-datatable-sm" [responsive]="true">
+                  <ng-template pTemplate="caption">
+                    <div class="flex">
+                      <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                        (click)="clear(dt1)"></button>
+                      <span class="p-input-icon-left ml-auto float-end">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+                          placeholder="Search keyword" />
+                      </span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th style="width:3rem">SR</th>
+                      <th>Name</th>
+                      <th>Address</th>
+                      <th>Phone</th>
+                      <th>Email</th>
+                      <th>DOB</th>
+                      <th>Gender</th>
+                      <th>Action</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-item let-sr="rowIndex">
+                    <tr>
+                      <td>{{sr+1}}</td>
+                      <td>{{item.firstName}} {{item.lastName}}</td>
+                      <td>{{item.address.address}},{{item.address.postalCode}},{{item.address.state}}</td>
+                      <td>{{item.phone}}</td>
+                      <td>{{item.email}}</td>
+                      <td>{{item.birthDate}}</td>
+                      <td>{{item.gender}}</td>
+                      <td style='white-space: nowrap'>
+                        <i class="fa fa-pencil-square-o fs-4 me-2 text-warning hand" aria-hidden="true"
+                          (click)="onEdit(item.id)"></i>
+                        <i class="fa fa-trash fs-4 text-danger hand" aria-hidden="true" (click)="onDelete(item.id)"></i>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="8">No record found.</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" *ngIf="isSidePanelOpen">
+      <div class="card">
+        <div class="card-header bg-dark">
+          <div class="row">
+            <div class="col-md-8">
+              <h6 class="fw-bold text-white">Create Employee</h6>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-close bg-danger float-end" (click)="onCloseSidePanel()"></button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="empForm">
+            <div class="row">
+              <div class="col-md-6">
+                <label class="fw-bold my-1">First Name</label>
+                <input type="text" class="form-control" formControlName="firstName" placeholder="Enter First Name">
+                <div class="text-danger"
+                  *ngIf="empForm.controls['firstName'].touched || empForm.controls['firstName'].dirty">
+                  <span *ngIf="empForm.controls['firstName'].errors?.['required']">First Name is required</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="fw-bold my-1">Last Name</label>
+                <input type="text" class="form-control" formControlName="lastName" placeholder="Enter Last Name">
+                <div class="text-danger"
+                  *ngIf="empForm.controls['lastName'].touched || empForm.controls['lastName'].dirty">
+                  <span *ngIf="empForm.controls['lastName'].errors?.['required']">Last Name is required</span>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col-md-6">
+                <label class="fw-bold my-1">Email</label>
+                <input type="text" class="form-control" formControlName="email" placeholder="Enter Email"
+                  [pattern]="emailPattern">
+                <div class="text-danger" *ngIf="empForm.controls['email'].touched || empForm.controls['email'].dirty">
+                  <span *ngIf="empForm.controls['email'].errors?.['required']">Email is required</span>
+                  <span *ngIf="empForm.controls['email'].errors?.['pattern']">Email not valid</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="fw-bold my-1">Phone</label>
+                <input type="text" class="form-control" formControlName="phone" placeholder="Enter Phone"
+                  [pattern]="phonePattern">
+                <div class="text-danger" *ngIf="empForm.controls['phone'].touched || empForm.controls['phone'].dirty">
+                  <span *ngIf="empForm.controls['phone'].errors?.['required']">Mobile Number is required.</span>
+                  <span *ngIf="empForm.controls['phone'].errors?.['pattern']">Please, Enter 10 digit Mobile
+                    Number.</span>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col-md-6">
+                <label class="fw-bold my-1">Date of Birth</label>
+                <input type="date" class="form-control" formControlName="birthDate">
+                <div class="text-danger"
+                  *ngIf="empForm.controls['birthDate'].touched || empForm.controls['birthDate'].dirty">
+                  <span *ngIf="empForm.controls['birthDate'].errors?.['required']">Date required</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="fw-bold my-1">Gender</label>
+                <div>
+                  <p-radioButton name="gender" value="male" formControlName="gender"></p-radioButton><span
+                    class="mx-1">Male</span>
+                  <p-radioButton name="gender" value="female" formControlName="gender"></p-radioButton><span
+                    class="mx-1">FeMale</span>
+                </div>
+                <div class="text-danger" *ngIf="empForm.controls['gender'].touched || empForm.controls['gender'].dirty">
+                  <span *ngIf="empForm.controls['gender'].errors?.['required']">This field is required</span>
+                </div>
+              </div>
+            </div>
+            <section formGroupName="address">
+              <div class="row mt-1">
+                <div class="col-md-6">
+                  <label class="fw-bold my-1">City</label>
+                  <input type="text" class="form-control" formControlName="city" placeholder="Enter City">
+                  <div class="text-danger"
+                    *ngIf="empForm.get('address.city').touched || empForm.get('address.city').dirty">
+                    <span *ngIf="empForm.get('address.city').errors?.['required']">City is required</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold my-1">Postal Code</label>
+                  <input type="text" class="form-control" formControlName="postalCode" placeholder="Enter Postal Code">
+                  <div class="text-danger"
+                    *ngIf="empForm.get('address.postalCode').touched || empForm.get('address.postalCode').dirty">
+                    <span *ngIf="empForm.get('address.postalCode').errors?.['required']">Postal Code is required</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-1">
+                <div class="col-md-6">
+                  <label class="fw-bold my-1">State</label>
+                  <input type="text" class="form-control" formControlName="state" placeholder="Enter state">
+                  <div class="text-danger"
+                    *ngIf="empForm.get('address.state').touched || empForm.get('address.state').dirty">
+                    <span *ngIf="empForm.get('address.state').errors?.['required']">State is required</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="fw-bold my-1">country</label>
+                  <select class="form-select" formControlName="country">
+                    <option value="" disabled>Select Country</option>
+                    <option value="India">India</option>
+                    <option value="United States">United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="China">China</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Russia">Russia</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Australia">Australia</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="South Korea">South Korea</option>
+                  </select>
+                  <div class="text-danger"
+                    *ngIf="empForm.get('address.country').touched || empForm.get('address.country').dirty">
+                    <span *ngIf="empForm.get('address.country').errors?.['required']">Country is required</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-1">
+                <div class="col-md-12">
+                  <label class="fw-bold my-1">Address</label>
+                  <textarea rows="3" class="form-control" formControlName="address"
+                    placeholder="Enter Address"></textarea>
+                  <div class="text-danger"
+                    *ngIf="empForm.get('address.address').touched || empForm.get('address.address').dirty">
+                    <span *ngIf="empForm.get('address.address').errors?.['required']">Address is required</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div class="row mt-3">
+              <div class="col-md-12 text-center">
+                <button class="btn btn-success btn-sm me-2" *ngIf="empForm.value.id == 0" (click)="onSave()"
+                  [disabled]="empForm.invalid">Save</button>
+                <button class="btn btn-warning btn-sm me-2" *ngIf="empForm.value.id != 0"
+                  (click)="onUpdate()">Update</button>
+                <button class="btn btn-danger btn-sm" (click)="onReset()">Cancel</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple"
+  [fullScreen]="true">
+  <p style="color: white"> Loading... </p>
+</ngx-spinner>

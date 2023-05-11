@@ -1,0 +1,9 @@
+.nav-link{
+  font-size: 17px;
+}
+
+.linkActive{
+  color: orange;
+  font-size: 19px;
+  font-weight: bold;
+}
